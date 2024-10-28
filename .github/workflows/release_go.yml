@@ -21,21 +21,22 @@ jobs:
       with:
         go-version: '1.23'
 
-    - id: compute_tag
-      uses: craig-day/compute-tag@v15
+    - uses: rmeneely/git-next-version@v1
       with:
-        github_token: ${{ github.token }}
-        version_type: patch
+        tag_pattern: 'v[0-9]*.[0-9]*.[0-9]*'
+        # The version increment - major, minor, patch, suffix, none
+        increment: 'patch'
+        set_next_version_tag: 'true'
 
     - shell: bash
       run: |
-        echo "::notice::Generated tag is '${{ steps.compute_tag.outputs.next_tag }}'"
+        echo "::notice::Generated tag is '$NEXT_VERSION'"
 
     - name: Create a new tag
       run: |
         go install github.com/ogen-go/ogen/cmd/ogen@latest        
         ogen --target ontrac/api/go -package ontracapi --clean openapi_spec/spec.yaml
-        git tag '${{ steps.compute_tag.outputs.next_tag }}'
+        git tag $NEXT_VERSION
         git push --tags
         
 
