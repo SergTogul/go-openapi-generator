@@ -1,0 +1,39 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23'
+
+    - id: calculate_next_version
+      uses: ldelarue/git-next-tag@v0
+      with:
+        tag-prefix: v
+
+    - shell: bash
+      run: |
+        echo "::notice::Generated tag is '${{ steps.calculate_next_version.outputs.tag }}'"
+
+    - name: Create a new tag
+      run: |
+        go get github.com/ogen-go/ogen/cmd/ogen
+        go install github.com/ogen-go/ogen/cmd/ogen        
+        ogen --target ontrac/api/go -package ontracapi --clean openapiVo/openapi.v0.yaml openapi_spec/spec.yaml
+        git tag '${{ steps.calculate_next_version.outputs.tag }}'
+        git push --tags
+        
+
