@@ -32,7 +32,6 @@ jobs:
 
     - name: Create a new tag
       run: |
-        go get github.com/ogen-go/ogen/cmd/ogen
         go install github.com/ogen-go/ogen/cmd/ogen        
         ogen --target ontrac/api/go -package ontracapi --clean openapiVo/openapi.v0.yaml openapi_spec/spec.yaml
         git tag '${{ steps.calculate_next_version.outputs.tag }}'
