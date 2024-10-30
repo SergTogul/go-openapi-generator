@@ -40,7 +40,7 @@ jobs:
         go install github.com/ogen-go/ogen/cmd/ogen@latest        
         ogen --target ontrac/api/go -package ontracapi --clean openapi_spec/spec.yaml
         git add ontrac/
-        git commit -a -m "$NEXT_VERSION" --author="GithubBot <GithubBot@users.noreply.github.com>"
+        git commit -a -m "$NEXT_VERSION" --author="github-actions <github-actions@github.com>"
         git tag $NEXT_VERSION
         git push --tags
         
