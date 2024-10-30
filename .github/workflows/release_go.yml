@@ -39,8 +39,10 @@ jobs:
       run: |
         go install github.com/ogen-go/ogen/cmd/ogen@latest        
         ogen --target ontrac/api/go -package ontracapi --clean openapi_spec/spec.yaml
+        git config --global user.email "$${{ github.actor }}@users.noreply.github.com"
+        git config --global user.name "${{ github.actor }}"
         git add ontrac/
-        git commit -a -m "$NEXT_VERSION" --author="SergTogul <sergtogul@users.noreply.github.com>"
+        git commit -a -m "$NEXT_VERSION" 
         git tag $NEXT_VERSION
         git push --tags
         
